@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface TarefaRepository extends JpaRepository<Tarefa, Long> {
 
-    List<Tarefa> findByData(LocalDate data);
+    List<Tarefa> findByDataCumprimento(LocalDate data);
 
     List<Tarefa> findTarefaByDataCumprimentoBetween(LocalDate dataInicio, LocalDate dataFim);
 }

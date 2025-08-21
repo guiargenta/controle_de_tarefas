@@ -26,7 +26,7 @@ public class TarefaService {
 
     @Transactional(readOnly = true)
     public List<Tarefa> buscarTarefaPorData(LocalDate data) {
-        return tarefaRepository.findByData(data);
+        return tarefaRepository.findByDataCumprimento(data);
     }
 
     @Transactional(readOnly = true)

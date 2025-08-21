@@ -7,10 +7,10 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 
-@Entity
 @Getter
 @Setter
 @ToString
+@Entity
 @Table(name = "tarefas")
 public class Tarefa {
 

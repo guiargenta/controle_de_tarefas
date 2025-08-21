@@ -20,19 +20,19 @@ public class TarefaController {
     }
 
     @PostMapping()
-    public ResponseEntity<Void> salvarTarefa(@RequestBody Tarefa tarefa) {
+    public ResponseEntity<Void> salvarTarefaCumprida(@RequestBody Tarefa tarefa) {
         tarefaService.salvarTarefa(tarefa);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping
-    public ResponseEntity<List<Tarefa>> buscarTarefaPorData(@RequestParam LocalDate data) {
+    @GetMapping("/data/{data}")
+    public ResponseEntity<List<Tarefa>> buscarTarefaCumpridaPorData(@RequestParam LocalDate data) {
         List<Tarefa> tarefas = tarefaService.buscarTarefaPorData(data);
         return ResponseEntity.status(HttpStatus.OK).body(tarefas);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Tarefa>> buscarTarefaEntreDatas(@RequestParam LocalDate dataInicio, LocalDate dataFim) {
+    @GetMapping("/periodo")
+    public ResponseEntity<List<Tarefa>> buscarTarefaCumpridaEntreDatas(@RequestParam LocalDate dataInicio, LocalDate dataFim) {
         List<Tarefa> tarefas = tarefaService.buscarTarefaEntreDatas(dataInicio, dataFim);
         return ResponseEntity.status(HttpStatus.OK).body(tarefas);
     }
