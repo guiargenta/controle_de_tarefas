@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -26,8 +26,14 @@ public class TarefaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Tarefa>> buscarTarefaPorData(@RequestParam Date data) {
+    public ResponseEntity<List<Tarefa>> buscarTarefaPorData(@RequestParam LocalDate data) {
         List<Tarefa> tarefas = tarefaService.buscarTarefaPorData(data);
+        return ResponseEntity.status(HttpStatus.OK).body(tarefas);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Tarefa>> buscarTarefaEntreDatas(@RequestParam LocalDate dataInicio, LocalDate dataFim) {
+        List<Tarefa> tarefas = tarefaService.buscarTarefaEntreDatas(dataInicio, dataFim);
         return ResponseEntity.status(HttpStatus.OK).body(tarefas);
     }
 

@@ -2,23 +2,29 @@ package com.gargenta.controleTarefas.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Getter
+@Setter
+@ToString
+@Table(name = "tarefas")
 public class Tarefa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50, unique = true)
-    private String descricao;
+    @Column(name = "nome_tarefa", nullable = false, length = 50, unique = true)
+    private String nomeTarefa;
 
-    @Column(nullable = false)
-    private Date data;
+    @Column(name = "data_cumprimento", nullable = false)
+    private LocalDate dataCumprimento;
 
-    @Column
-    private Double quantidade;
+    @Column(name = "quantidade")
+    private int quantidade;
+
 }

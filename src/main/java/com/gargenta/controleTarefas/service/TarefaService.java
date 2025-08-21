@@ -8,13 +8,13 @@ import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
-@Service
 @AllArgsConstructor
 @Getter
 @Setter
+@Service
 public class TarefaService {
 
     private final TarefaRepository tarefaRepository;
@@ -25,7 +25,12 @@ public class TarefaService {
     }
 
     @Transactional(readOnly = true)
-    public List<Tarefa> buscarTarefaPorData(Date data) {
+    public List<Tarefa> buscarTarefaPorData(LocalDate data) {
         return tarefaRepository.findByData(data);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Tarefa> buscarTarefaEntreDatas(LocalDate dataInicio, LocalDate dataFim) {
+        return tarefaRepository.findTarefaByDataCumprimentoBetween(dataInicio, dataFim);
     }
 }
