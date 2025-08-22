@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tarefa")
+@RequestMapping("/api/tarefas")
 public class TarefaController {
 
     private final TarefaService tarefaService;
@@ -20,9 +20,9 @@ public class TarefaController {
     }
 
     @PostMapping()
-    public ResponseEntity<Void> salvarTarefaCumprida(@RequestBody Tarefa tarefa) {
-        tarefaService.salvarTarefa(tarefa);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Void> salvarOuAtualizarTarefaCumprida(@RequestBody Tarefa tarefa) {
+        tarefaService.salvarTarefaOuAtualizarTarefa(tarefa);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping("/data/{data}")

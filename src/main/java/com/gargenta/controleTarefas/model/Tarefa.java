@@ -27,4 +27,9 @@ public class Tarefa {
     @Column(name = "quantidade")
     private int quantidade;
 
+    public Tarefa(String nomeTarefa, LocalDate dataCumprimento, Integer quantidade) {
+        this.nomeTarefa = nomeTarefa;
+        this.dataCumprimento = dataCumprimento;
+        this.quantidade = quantidade;
+    }
 }
