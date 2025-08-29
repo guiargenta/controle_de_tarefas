@@ -23,7 +23,7 @@ public class TarefaService {
     @Transactional
     public void salvarTarefaOuAtualizarTarefa(Tarefa tarefa) {
         // Verifica se já existe uma tarefa com o mesmo nome na mesma data
-        Optional<Tarefa> tarefaExistente = tarefaRepository.findByNomeDaTarefaEData(
+        Optional<Tarefa> tarefaExistente = tarefaRepository.findByNomeTarefaAndDataCumprimento (
                 tarefa.getNomeTarefa(),
                 tarefa.getDataCumprimento()
         );
@@ -39,7 +39,7 @@ public class TarefaService {
 
     @Transactional
     public Tarefa incrementarQuantidade(String nomeDaTarefa, LocalDate dataCumprimento, Integer quantidadeAdicional) {
-        Optional<Tarefa> tarefaExistente = tarefaRepository.findByNomeDaTarefaEData(
+        Optional<Tarefa> tarefaExistente = tarefaRepository.findByNomeTarefaAndDataCumprimento (
                 nomeDaTarefa, dataCumprimento
         );
 
@@ -66,7 +66,7 @@ public class TarefaService {
 
     @Transactional(readOnly = true)
     public Optional<Tarefa> findByNomeDaTarefaEData(String NomeDaTarefa, LocalDate dataCumprimento) {
-        return tarefaRepository.findByNomeDaTarefaEData(NomeDaTarefa, dataCumprimento);
+        return tarefaRepository.findByNomeTarefaAndDataCumprimento (NomeDaTarefa, dataCumprimento);
     }
 
     @Transactional

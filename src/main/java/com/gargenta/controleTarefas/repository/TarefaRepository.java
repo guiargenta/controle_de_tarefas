@@ -13,9 +13,9 @@ import java.util.Optional;
 @Repository
 public interface TarefaRepository extends JpaRepository<Tarefa, Long> {
 
-    Optional<Tarefa> findByNomeDaTarefaEData(String NomeDaTarefa, LocalDate dataCumprimento);
+    Optional<Tarefa> findByNomeTarefaAndDataCumprimento (String nomeTarefa, LocalDate dataCumprimento);
 
-    List<Tarefa> findByDataCumprimento(LocalDate data);
+    List<Tarefa> findByDataCumprimento(LocalDate dataCumprimento);
 
     List<Tarefa> findTarefaByDataCumprimentoBetween(LocalDate dataInicio, LocalDate dataFim);
 
