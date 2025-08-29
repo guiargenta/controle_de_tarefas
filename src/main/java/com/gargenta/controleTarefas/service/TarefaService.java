@@ -64,8 +64,13 @@ public class TarefaService {
         return tarefaRepository.findTarefaByDataCumprimentoBetween(dataInicio, dataFim);
     }
 
+    @Transactional(readOnly = true)
     public Optional<Tarefa> findByNomeDaTarefaEData(String NomeDaTarefa, LocalDate dataCumprimento) {
-
         return tarefaRepository.findByNomeDaTarefaEData(NomeDaTarefa, dataCumprimento);
+    }
+
+    @Transactional
+    public List<Tarefa> buscarTodas() {
+        return tarefaRepository.findAll();
     }
 }

@@ -2,6 +2,7 @@ package com.gargenta.controleTarefas.controller;
 
 import com.gargenta.controleTarefas.model.Tarefa;
 import com.gargenta.controleTarefas.service.TarefaService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,21 +21,34 @@ public class TarefaController {
     }
 
     @PostMapping()
-    public ResponseEntity<Void> salvarOuAtualizarTarefaCumprida(@RequestBody Tarefa tarefa) {
+    public ResponseEntity<Void> criarOuAtualizarTarefaCumprida(@RequestBody Tarefa tarefa) {
         tarefaService.salvarTarefaOuAtualizarTarefa(tarefa);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @PostMapping("/incrementar")
+    public ResponseEntity<Tarefa> incrementarQuantidade(
+            @RequestParam String nomeTarefa,
+            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate dataTarefa,
+            @RequestParam(defaultValue = "1") Integer quantidade
+    ) {
+        return ResponseEntity.ok(tarefaService.incrementarQuantidade(nomeTarefa, dataTarefa, quantidade));
+    }
+
     @GetMapping("/data/{data}")
     public ResponseEntity<List<Tarefa>> buscarTarefaCumpridaPorData(@RequestParam LocalDate data) {
-        List<Tarefa> tarefas = tarefaService.buscarTarefaPorData(data);
-        return ResponseEntity.status(HttpStatus.OK).body(tarefas);
+        return ResponseEntity.ok(tarefaService.buscarTarefaPorData(data));
     }
 
     @GetMapping("/periodo")
-    public ResponseEntity<List<Tarefa>> buscarTarefaCumpridaEntreDatas(@RequestParam LocalDate dataInicio, LocalDate dataFim) {
-        List<Tarefa> tarefas = tarefaService.buscarTarefaEntreDatas(dataInicio, dataFim);
-        return ResponseEntity.status(HttpStatus.OK).body(tarefas);
+    public ResponseEntity<List<Tarefa>> buscarTarefaCumpridaEntreDatas(
+            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate dataInicio,
+            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate dataFim) {
+        return ResponseEntity.ok(tarefaService.buscarTarefaEntreDatas(dataInicio, dataFim));
     }
 
+    @GetMapping
+    public ResponseEntity<List<Tarefa>> buscarTodas() {
+        return ResponseEntity.ok(tarefaService.buscarTodas());
+    }
 }
