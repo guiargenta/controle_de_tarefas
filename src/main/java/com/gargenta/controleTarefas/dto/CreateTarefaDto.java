@@ -7,10 +7,12 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-@AllArgsConstructor @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
-public class TarefaResponseDto {
+public class CreateTarefaDto {
 
     @NotBlank
     @Size(max = 50)

@@ -21,7 +21,7 @@ public class Tarefa {
     @Column(name = "nome_tarefa", nullable = false, length = 50, unique = true)
     private String nomeTarefa;
 
-    @Column(name = "data_cumprimento", nullable = false)
+    @Column(name = "data_cumprimento")
     private LocalDate dataCumprimento;
 
     @Column(name = "quantidade")
