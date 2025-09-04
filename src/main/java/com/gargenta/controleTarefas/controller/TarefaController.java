@@ -1,7 +1,10 @@
 package com.gargenta.controleTarefas.controller;
 
+import com.gargenta.controleTarefas.dto.TarefaResponseDto;
+import com.gargenta.controleTarefas.dto.mapper.TarefaMapper;
 import com.gargenta.controleTarefas.model.Tarefa;
 import com.gargenta.controleTarefas.service.TarefaService;
+import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +24,9 @@ public class TarefaController {
     }
 
     @PostMapping()
-    public ResponseEntity<Void> criarOuAtualizarTarefaCumprida(@RequestBody Tarefa tarefa) {
-        tarefaService.salvarTarefaOuAtualizarTarefa(tarefa);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<TarefaResponseDto> criarOuAtualizarTarefaCumprida(@RequestBody TarefaResponseDto dto) {
+        Tarefa tarefa = tarefaService.salvarTarefaOuAtualizarTarefa(TarefaMapper.toTarefa(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(TarefaMapper.toDto(tarefa));
     }
 
     @PostMapping("/incrementar")

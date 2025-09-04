@@ -13,12 +13,11 @@ import java.time.LocalDate;
 public class TarefaResponseDto {
 
     @NotBlank
-    @Size(max = 50)
     String nomeTarefa;
 
     @PastOrPresent
     LocalDate dataCumprimento;
 
-    @Size(min = 0)
+    @Size(min = 0, max = 50)
     int quantidade;
 }

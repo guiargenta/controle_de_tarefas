@@ -21,9 +21,15 @@ public class TarefaService {
     private final TarefaRepository tarefaRepository;
 
     @Transactional
-    public void salvarTarefaOuAtualizarTarefa(Tarefa tarefa) {
+    public Tarefa salvarTarefaOuAtualizarTarefa(Tarefa tarefa) {
+
+        // Se a data não for informada, define como data atual
+        if (tarefa.getDataCumprimento() == null) {
+            tarefa.setDataCumprimento(LocalDate.now());
+        }
+
         // Verifica se já existe uma tarefa com o mesmo nome na mesma data
-        Optional<Tarefa> tarefaExistente = tarefaRepository.findByNomeTarefaAndDataCumprimento (
+        Optional<Tarefa> tarefaExistente = tarefaRepository.findByNomeTarefaAndDataCumprimento(
                 tarefa.getNomeTarefa(),
                 tarefa.getDataCumprimento()
         );
@@ -31,15 +37,18 @@ public class TarefaService {
         if (tarefaExistente.isPresent()) {
             Tarefa atualizado = tarefaExistente.get();
             atualizado.setQuantidade(atualizado.getQuantidade() + tarefa.getQuantidade());
-            tarefaRepository.saveAndFlush(tarefa);
+            return tarefaRepository.saveAndFlush(tarefa);
         } else {
-            tarefaRepository.save(tarefa);
+            return tarefaRepository.save(tarefa);
         }
     }
 
     @Transactional
     public Tarefa incrementarQuantidade(String nomeDaTarefa, LocalDate dataCumprimento, Integer quantidadeAdicional) {
-        Optional<Tarefa> tarefaExistente = tarefaRepository.findByNomeTarefaAndDataCumprimento (
+
+        LocalDate data = (dataCumprimento != null) ? dataCumprimento : LocalDate.now();
+
+        Optional<Tarefa> tarefaExistente = tarefaRepository.findByNomeTarefaAndDataCumprimento(
                 nomeDaTarefa, dataCumprimento
         );
 
@@ -56,7 +65,8 @@ public class TarefaService {
 
     @Transactional(readOnly = true)
     public List<Tarefa> buscarTarefaPorData(LocalDate data) {
-        return tarefaRepository.findByDataCumprimento(data);
+        LocalDate dataBusca = (data != null) ? data : LocalDate.now();
+        return tarefaRepository.findByDataCumprimento(dataBusca);
     }
 
     @Transactional(readOnly = true)
@@ -66,7 +76,13 @@ public class TarefaService {
 
     @Transactional(readOnly = true)
     public Optional<Tarefa> findByNomeDaTarefaEData(String NomeDaTarefa, LocalDate dataCumprimento) {
-        return tarefaRepository.findByNomeTarefaAndDataCumprimento (NomeDaTarefa, dataCumprimento);
+        return tarefaRepository.findByNomeTarefaAndDataCumprimento(NomeDaTarefa, dataCumprimento);
+    }
+
+    @Transactional
+    public Integer quantidadeTotalPorData(LocalDate data) {
+        LocalDate dataBusca = (data!= null) ? data : LocalDate.now();
+        return tarefaRepository.sumQuantidadeByDataCumprimento(dataBusca);
     }
 
     @Transactional

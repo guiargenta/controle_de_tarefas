@@ -8,11 +8,6 @@ import org.modelmapper.ModelMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
 public class TarefaMapper {
 
     public static Tarefa toTarefa(TarefaResponseDto tarefaResponseDto) {
