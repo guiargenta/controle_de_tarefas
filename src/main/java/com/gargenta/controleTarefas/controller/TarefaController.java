@@ -4,7 +4,6 @@ import com.gargenta.controleTarefas.dto.TarefaResponseDto;
 import com.gargenta.controleTarefas.dto.mapper.TarefaMapper;
 import com.gargenta.controleTarefas.model.Tarefa;
 import com.gargenta.controleTarefas.service.TarefaService;
-import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +31,7 @@ public class TarefaController {
     @PostMapping("/incrementar")
     public ResponseEntity<Tarefa> incrementarQuantidade(
             @RequestParam String nomeTarefa,
-            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate dataTarefa,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate dataTarefa,
             @RequestParam(defaultValue = "1") Integer quantidade
     ) {
         return ResponseEntity.ok(tarefaService.incrementarQuantidade(nomeTarefa, dataTarefa, quantidade));
@@ -51,7 +50,14 @@ public class TarefaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Tarefa>> buscarTodas() {
-        return ResponseEntity.ok(tarefaService.buscarTodas());
+    public ResponseEntity<List<TarefaResponseDto>> buscarTodas() {
+        List<Tarefa> tarefas = tarefaService.buscarTodas();
+        List<TarefaResponseDto> dtos = TarefaMapper.toListDto(tarefas);
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/total-hoje")
+    public ResponseEntity<Integer> quantidadeTotalHoje() {
+        return ResponseEntity.ok(tarefaService.quantidadeTotalPorData(LocalDate.now()));
     }
 }
