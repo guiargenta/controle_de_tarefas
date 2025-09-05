@@ -2,13 +2,15 @@ package com.gargenta.controleTarefas.service;
 
 import com.gargenta.controleTarefas.model.Usuario;
 import com.gargenta.controleTarefas.repository.UsuarioRepository;
-import jakarta.persistence.EntityNotFoundException;
+import exception.EntityNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -36,6 +38,11 @@ public class UsuarioService {
         return usuarioRepository.findByUsername(username).orElseThrow(
                 () -> new EntityNotFoundException(String.format("Username: %d não localizado.", username))
         );
+    }
+
+    @Transactional(readOnly = true)
+    public List<Usuario> buscarTodos() {
+        return usuarioRepository.findAll();
     }
 
 }
