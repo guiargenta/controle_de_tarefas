@@ -33,7 +33,7 @@ public class UsuarioService {
 
     @Transactional(readOnly = true)
     public Usuario buscarPorUsername(String username) {
-        return usuarioRepository.findbyUsername(username).orElseThrow(
+        return usuarioRepository.findByUsername(username).orElseThrow(
                 () -> new EntityNotFoundException(String.format("Username: %d não localizado.", username))
         );
     }
