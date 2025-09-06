@@ -1,9 +1,10 @@
 package com.gargenta.controleTarefas.controller;
 
+import com.gargenta.controleTarefas.dto.UsuarioResponseDto;
+import com.gargenta.controleTarefas.dto.mapper.UsuarioMapper;
 import com.gargenta.controleTarefas.model.Usuario;
 import com.gargenta.controleTarefas.service.UsuarioService;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.http.HttpStatus;
@@ -32,9 +33,9 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UsuarioResponseDto> getUserById(@PathVariable Long id) {
         Usuario usuario = usuarioService.buscarPorId(id);
-        return ResponseEntity.ok(usuario);
+        return ResponseEntity.ok(UsuarioMapper.toUsuarioDto(usuario));
     }
 
     @GetMapping
