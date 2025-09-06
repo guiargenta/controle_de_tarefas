@@ -4,7 +4,6 @@ import com.gargenta.controleTarefas.model.Usuario;
 import com.gargenta.controleTarefas.repository.UsuarioRepository;
 import exception.EntityNotFoundException;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.stereotype.Service;
@@ -15,11 +14,14 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @Service
 public class UsuarioService {
 
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
+
+    public UsuarioService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
