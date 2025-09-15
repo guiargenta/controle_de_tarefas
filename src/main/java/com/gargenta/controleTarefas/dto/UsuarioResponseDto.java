@@ -12,13 +12,8 @@ import lombok.*;
 @ToString
 public class UsuarioResponseDto {
 
-    @NotBlank
     private String username;
-
-    @NotBlank
-    @Email
     private String email;
-
     private String role;
 
 }

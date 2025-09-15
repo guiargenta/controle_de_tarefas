@@ -3,6 +3,7 @@ package com.gargenta.controleTarefas.service;
 import com.gargenta.controleTarefas.model.Usuario;
 import com.gargenta.controleTarefas.repository.UsuarioRepository;
 import exception.EntityNotFoundException;
+import exception.PasswordInvalidException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -26,6 +27,23 @@ public class UsuarioService {
     @Transactional
     public Usuario salvar(Usuario usuario) {
         return usuarioRepository.saveAndFlush(usuario);
+    }
+
+    @Transactional
+    public Usuario editarSenha(Long id, String senhaAtual, String novaSenha, String confirmaNovaSenha) {
+
+        if (!novaSenha.equals(confirmaNovaSenha)) {
+            throw new PasswordInvalidException("Senhas não conferem.");
+        }
+
+        Usuario usuario = buscarPorId(id);
+
+        if (!senhaAtual.equals(usuario.getPassword())) {
+            throw new PasswordInvalidException("Senha atual não confere.");
+        }
+
+        usuario.setPassword(senhaAtual);
+        return usuario;
     }
 
     @Transactional(readOnly = true)
