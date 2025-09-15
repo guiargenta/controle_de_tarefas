@@ -43,4 +43,10 @@ public class UsuarioController {
         List<Usuario> usuarios = usuarioService.buscarTodos();
         return ResponseEntity.ok(UsuarioMapper.toListDto(usuarios));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
+        usuarioService.deletarUsuario(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
