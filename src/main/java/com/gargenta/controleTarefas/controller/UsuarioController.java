@@ -1,9 +1,12 @@
 package com.gargenta.controleTarefas.controller;
 
+import com.gargenta.controleTarefas.dto.CreateUsuarioDto;
 import com.gargenta.controleTarefas.dto.UsuarioResponseDto;
 import com.gargenta.controleTarefas.dto.mapper.UsuarioMapper;
 import com.gargenta.controleTarefas.model.Usuario;
 import com.gargenta.controleTarefas.service.UsuarioService;
+import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -27,15 +30,21 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> createUser(@RequestBody Usuario usuario) {
-        Usuario usuarioSalvo = usuarioService.salvar(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
+    public ResponseEntity<UsuarioResponseDto> createUser(@Valid @RequestBody CreateUsuarioDto dto) {
+        Usuario usuarioSalvo = usuarioService.salvar(UsuarioMapper.toUsuario(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toUsuarioDto(usuarioSalvo));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponseDto> getUserById(@PathVariable Long id) {
         Usuario usuario = usuarioService.buscarPorId(id);
         return ResponseEntity.ok(UsuarioMapper.toUsuarioDto(usuario));
+    }
+
+    @GetMapping("/user")
+        public ResponseEntity<UsuarioResponseDto> getByUsername(@RequestParam String username) {
+        Usuario usuario = usuarioService.buscarPorUsername(username);
+        return ResponseEntity.status(HttpStatus.OK).body(UsuarioMapper.toUsuarioDto(usuario));
     }
 
     @GetMapping

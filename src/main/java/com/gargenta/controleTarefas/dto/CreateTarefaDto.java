@@ -21,6 +21,5 @@ public class CreateTarefaDto {
     @PastOrPresent
     LocalDate dataCumprimento;
 
-    @Size(min = 0)
     int quantidade;
 }
