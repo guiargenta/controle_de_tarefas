@@ -2,11 +2,14 @@ package com.gargenta.controleTarefas.service;
 
 import com.gargenta.controleTarefas.model.Usuario;
 import com.gargenta.controleTarefas.repository.UsuarioRepository;
-import exception.EntityNotFoundException;
-import exception.PasswordInvalidException;
+import com.gargenta.controleTarefas.exception.EmailUniqueViolationException;
+import com.gargenta.controleTarefas.exception.EntityNotFoundException;
+import com.gargenta.controleTarefas.exception.PasswordInvalidException;
+import com.gargenta.controleTarefas.exception.UsernameUniqueViolationException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +29,17 @@ public class UsuarioService {
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
-        return usuarioRepository.saveAndFlush(usuario);
+        try {
+            return usuarioRepository.saveAndFlush(usuario);
+        } catch (DataIntegrityViolationException exception) {
+            if (exception.getCause() instanceof UsernameUniqueViolationException) {
+                throw new UsernameUniqueViolationException(String.format("Usuário: {%s} já cadastrado.", usuario.getUsername()));
+            } else if (exception.getCause() instanceof EmailUniqueViolationException) {
+                throw new EmailUniqueViolationException(String.format("E-mail: {%s} já cadastrado.", usuario.getEmail()));
+            } else {
+                throw exception;
+            }
+        }
     }
 
     @Transactional

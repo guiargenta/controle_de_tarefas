@@ -1,4 +1,4 @@
-package exception;
+package com.gargenta.controleTarefas.exception;
 
 public class EmailUniqueViolationException extends RuntimeException {
     public EmailUniqueViolationException(String message) {

@@ -1,4 +1,4 @@
-package exception.exceptionHandler;
+package com.gargenta.controleTarefas.exception.exceptionHandler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.servlet.http.HttpServletRequest;

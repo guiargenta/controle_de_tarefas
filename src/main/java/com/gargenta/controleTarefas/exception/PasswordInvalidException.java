@@ -1,4 +1,4 @@
-package exception;
+package com.gargenta.controleTarefas.exception;
 
 public class PasswordInvalidException extends RuntimeException {
     public PasswordInvalidException(String message) {
