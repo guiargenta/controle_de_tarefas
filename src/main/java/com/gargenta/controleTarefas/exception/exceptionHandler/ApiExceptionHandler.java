@@ -32,15 +32,28 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorMessage> handleUsernameUniqueViolationException(
-            RuntimeException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorMessage> handleDataIntegrityViolationException(
+            DataIntegrityViolationException ex, HttpServletRequest request) {
 
-        log.error("Api Error: " + ex);
+        log.error("Api Error: ", ex);
+
+        String rootMessage = ex.getRootCause() != null ? ex.getRootCause().getMessage() : ex.getMessage();
+        String userMessage;
+
+        if (rootMessage.contains("username")) {
+            userMessage = "Usuário já cadastrado.";
+        } else if (rootMessage.contains("email")) {
+            userMessage = "E-mail já cadastrado.";
+        } else {
+            userMessage = "Violação de restrição de dados.";
+        }
 
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(
-                        request, HttpStatus.CONFLICT, "Violação de identidade única"));
+                        request,
+                        HttpStatus.CONFLICT,
+                        userMessage));
     }
 }
