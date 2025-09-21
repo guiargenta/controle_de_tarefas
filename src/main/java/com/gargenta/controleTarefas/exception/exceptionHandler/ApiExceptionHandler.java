@@ -1,5 +1,6 @@
 package com.gargenta.controleTarefas.exception.exceptionHandler;
 
+import com.gargenta.controleTarefas.exception.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -28,6 +29,21 @@ public class ApiExceptionHandler {
                         HttpStatus.UNPROCESSABLE_ENTITY,
                         "Campo(s) inválido(s).",
                         result
+                ));
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorMessage> methodEntityNotFoundException(
+            EntityNotFoundException ex, HttpServletRequest request) {
+
+        log.error("Api Error: " + ex);
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(
+                        request,
+                        HttpStatus.NOT_FOUND,
+                        "Usuário não encontrado."
                 ));
     }
 
