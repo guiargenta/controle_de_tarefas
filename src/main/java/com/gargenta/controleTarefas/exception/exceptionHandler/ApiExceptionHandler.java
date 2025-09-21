@@ -1,6 +1,7 @@
 package com.gargenta.controleTarefas.exception.exceptionHandler;
 
 import com.gargenta.controleTarefas.exception.EntityNotFoundException;
+import com.gargenta.controleTarefas.exception.UsernameNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -32,18 +33,35 @@ public class ApiExceptionHandler {
                 ));
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorMessage> methodEntityNotFoundException(
-            EntityNotFoundException ex, HttpServletRequest request) {
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ErrorMessage> methodUsernameNotFoundException(
+            UsernameNotFoundException ex, HttpServletRequest request) {
 
-        log.error("Api Error: " + ex);
+        log.error("Api Error: ", ex);
+
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(
                         request,
                         HttpStatus.NOT_FOUND,
-                        "Usuário não encontrado."
+                        ex.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorMessage> methodEntityNotFoundException(
+            EntityNotFoundException ex, HttpServletRequest request) {
+
+        log.error("Api Error: ", ex);
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(
+                        request,
+                        HttpStatus.NOT_FOUND,
+                        ex.getMessage()
                 ));
     }
 

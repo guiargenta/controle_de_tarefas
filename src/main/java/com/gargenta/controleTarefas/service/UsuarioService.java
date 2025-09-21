@@ -1,11 +1,8 @@
 package com.gargenta.controleTarefas.service;
 
+import com.gargenta.controleTarefas.exception.*;
 import com.gargenta.controleTarefas.model.Usuario;
 import com.gargenta.controleTarefas.repository.UsuarioRepository;
-import com.gargenta.controleTarefas.exception.EmailUniqueViolationException;
-import com.gargenta.controleTarefas.exception.EntityNotFoundException;
-import com.gargenta.controleTarefas.exception.PasswordInvalidException;
-import com.gargenta.controleTarefas.exception.UsernameUniqueViolationException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -69,7 +66,7 @@ public class UsuarioService {
     @Transactional(readOnly = true)
     public Usuario buscarPorUsername(String username) {
         return usuarioRepository.findByUsername(username).orElseThrow(
-                () -> new EntityNotFoundException(String.format("Username: %d não localizado.", username))
+                () -> new UsernameNotFoundException(String.format("Username: '%s' não localizado.", username))
         );
     }
 
