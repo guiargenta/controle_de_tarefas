@@ -2,11 +2,11 @@ package com.gargenta.controleTarefas.controller;
 
 import com.gargenta.controleTarefas.dto.CreateUsuarioDto;
 import com.gargenta.controleTarefas.dto.UsuarioResponseDto;
+import com.gargenta.controleTarefas.dto.UsuarioSenhaDto;
 import com.gargenta.controleTarefas.dto.mapper.UsuarioMapper;
 import com.gargenta.controleTarefas.model.Usuario;
 import com.gargenta.controleTarefas.service.UsuarioService;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -35,6 +35,12 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toUsuarioDto(usuarioSalvo));
     }
 
+    @PostMapping("/{id}")
+    public ResponseEntity<UsuarioResponseDto> changePassword(@PathVariable Long id, @RequestBody UsuarioSenhaDto dto) {
+        Usuario usuario = usuarioService.editarSenha(id, dto.getSenhaAtual(), dto.getNovaSenha(), dto.getConfirmaSenha());
+        return ResponseEntity.status(HttpStatus.OK).body(UsuarioMapper.toUsuarioDto(usuario));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponseDto> getUserById(@PathVariable Long id) {
         Usuario usuario = usuarioService.buscarPorId(id);
@@ -42,7 +48,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/user")
-        public ResponseEntity<UsuarioResponseDto> getByUsername(@RequestParam String username) {
+    public ResponseEntity<UsuarioResponseDto> getByUsername(@RequestParam String username) {
         Usuario usuario = usuarioService.buscarPorUsername(username);
         return ResponseEntity.status(HttpStatus.OK).body(UsuarioMapper.toUsuarioDto(usuario));
     }
