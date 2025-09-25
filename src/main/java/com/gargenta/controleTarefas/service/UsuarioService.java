@@ -52,7 +52,7 @@ public class UsuarioService {
             throw new PasswordInvalidException("Senha atual não confere.");
         }
 
-        usuario.setPassword(senhaAtual);
+        usuario.setPassword(novaSenha);
         return usuario;
     }
 

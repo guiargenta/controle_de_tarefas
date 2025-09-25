@@ -1,6 +1,7 @@
 package com.gargenta.controleTarefas.exception.exceptionHandler;
 
 import com.gargenta.controleTarefas.exception.EntityNotFoundException;
+import com.gargenta.controleTarefas.exception.PasswordInvalidException;
 import com.gargenta.controleTarefas.exception.UsernameNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,22 @@ public class ApiExceptionHandler {
                         HttpStatus.UNPROCESSABLE_ENTITY,
                         "Campo(s) inválido(s).",
                         result
+                ));
+    }
+
+    @ExceptionHandler(PasswordInvalidException.class)
+    public ResponseEntity<ErrorMessage> methodPasswordInvalidException(
+            PasswordInvalidException ex, HttpServletRequest request) {
+
+        log.error("Api Error: ", ex);
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(
+                        request,
+                        HttpStatus.UNAUTHORIZED,
+                        ex.getMessage()
                 ));
     }
 

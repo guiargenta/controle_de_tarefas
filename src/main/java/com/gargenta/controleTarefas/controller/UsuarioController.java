@@ -36,9 +36,9 @@ public class UsuarioController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<UsuarioResponseDto> changePassword(@PathVariable Long id, @RequestBody UsuarioSenhaDto dto) {
+    public ResponseEntity<Void> updatePassword(@PathVariable Long id, @Valid @RequestBody UsuarioSenhaDto dto) {
         Usuario usuario = usuarioService.editarSenha(id, dto.getSenhaAtual(), dto.getNovaSenha(), dto.getConfirmaSenha());
-        return ResponseEntity.status(HttpStatus.OK).body(UsuarioMapper.toUsuarioDto(usuario));
+        return ResponseEntity.noContent().build(    );
     }
 
     @GetMapping("/{id}")
