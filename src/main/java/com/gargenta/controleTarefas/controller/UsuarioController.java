@@ -53,9 +53,9 @@ public class UsuarioController {
 
     @Operation(summary = "Alterar senha", description = "Recurso para alterar a senha de um usuário",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Senha alterada com sucesso.",
+                    @ApiResponse(responseCode = "204", description = "Senha alterada com sucesso.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDto.class))),
-                    @ApiResponse(responseCode = "401", description = "Não autorizado devido à falha de autenticação.",
+                    @ApiResponse(responseCode = "400", description = "Não autorizado devido à falha de autenticação.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping("/{id}")
