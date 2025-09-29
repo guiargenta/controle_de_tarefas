@@ -1,1 +1,1 @@
-DELETE * FROM usuarios;
+DELETE FROM usuarios;
