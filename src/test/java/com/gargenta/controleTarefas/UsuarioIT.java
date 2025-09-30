@@ -38,7 +38,7 @@ public class UsuarioIT {
     }
 
     @Test
-    public void criarUsuario_comPasswordInvalido_retornarUsuarioCriadoComStatus422() {
+    public void criarUsuario_comPasswordInvalido_retornarErrorMessageComStatus422() {
         ErrorMessage responseBody = webTestClient
                 .post()
                 .uri("/api/usuarios")
@@ -57,6 +57,37 @@ public class UsuarioIT {
                 .uri("/api/usuarios")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new CreateUsuarioDto("fulano@gmail.com", "", "fulano"))
+                .exchange()
+                .expectStatus().isEqualTo(422)
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        Assertions.assertNotNull(responseBody);
+        org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
+    }
+
+    @Test
+    public void criarUsuario_comUsernameInvalido_retornarErrorMessageComStatus422() {
+        ErrorMessage responseBody = webTestClient
+                .post()
+                .uri("/api/usuarios")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new CreateUsuarioDto("fulano@gmail.com", "123456", ""))
+                .exchange()
+                .expectStatus().isEqualTo(422)
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        Assertions.assertNotNull(responseBody);
+        org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
+
+
+        responseBody = webTestClient
+                .post()
+                .uri("/api/usuarios")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new CreateUsuarioDto("fulano@gmail.com", "123456", "     ")) // espaços em branco
                 .exchange()
                 .expectStatus().isEqualTo(422)
                 .expectBody(ErrorMessage.class)
