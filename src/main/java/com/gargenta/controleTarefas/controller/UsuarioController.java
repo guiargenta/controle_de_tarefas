@@ -58,7 +58,7 @@ public class UsuarioController {
                     @ApiResponse(responseCode = "400", description = "Não autorizado devido à falha de autenticação.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             })
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Void> updatePassword(@PathVariable Long id, @Valid @RequestBody UsuarioSenhaDto dto) {
         Usuario usuario = usuarioService.editarSenha(id, dto.getSenhaAtual(), dto.getNovaSenha(), dto.getConfirmaSenha());
         return ResponseEntity.noContent().build();
