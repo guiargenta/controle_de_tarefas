@@ -1,12 +1,12 @@
 package com.gargenta.controleTarefas.jwt;
 
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -20,7 +20,8 @@ public class JwtUtils {
     private static final long EXPIRE_HOURS = 0;
     private static final long EXPIRE_MINUTES = 4;
 
-    private JwtUtils() {}
+    private JwtUtils() {
+    }
 
     private static Key generateKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
@@ -30,5 +31,21 @@ public class JwtUtils {
         LocalDateTime dateTime = LocalDateTime.from(start.toInstant());
         LocalDateTime end = dateTime.plusDays(EXPIRE_DAYS).plusHours(EXPIRE_HOURS).plusMinutes(EXPIRE_MINUTES);
         return Date.from(Instant.from(end));
+    }
+
+    public static JwtToken createToken(String username, String role) {
+        Date issuedAt = Date.from(Instant.now());
+        Date expireAt = expireDate(issuedAt);
+
+        String token = Jwts.builder()
+                .header().type("JWT").and()
+                .subject(username)
+                .issuedAt(issuedAt)
+                .expiration(expireAt)
+                .signWith(generateKey())
+                .claim("role", role)
+                .compact();
+
+        return new JwtToken(token);
     }
 }
