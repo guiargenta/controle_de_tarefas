@@ -1,11 +1,12 @@
 package com.gargenta.controleTarefas.jwt;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -23,7 +24,7 @@ public class JwtUtils {
     private JwtUtils() {
     }
 
-    private static Key generateKey() {
+    private static javax.crypto.SecretKey generateKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -38,7 +39,8 @@ public class JwtUtils {
         Date expireAt = expireDate(issuedAt);
 
         String token = Jwts.builder()
-                .header().type("JWT").and()
+                .header().add("typ", "JWT")
+                .and()
                 .subject(username)
                 .issuedAt(issuedAt)
                 .expiration(expireAt)
@@ -47,5 +49,41 @@ public class JwtUtils {
                 .compact();
 
         return new JwtToken(token);
+    }
+
+    private static Claims getClaimsFromToken(String token) {
+        try {
+            return Jwts.parser()
+                    .verifyWith(generateKey())
+                    .build()
+                    .parseSignedClaims(refactorToken(token)).getPayload();
+        } catch (JwtException ex) {
+            log.error(String.format("Token inválido %s", ex.getMessage()));
+        }
+        return null;
+    }
+
+    private static String refactorToken(String token) {
+        if (token.contains(JWT_BEARER)) {
+            return token.substring(JWT_BEARER.length());
+        }
+        return token;
+    }
+
+    public static boolean isTokenValid(String token) {
+        try {
+            Jwts.parser()
+                    .verifyWith(generateKey())
+                    .build()
+                    .parseSignedClaims(refactorToken(token));
+            return true;
+        } catch (JwtException ex) {
+            log.error(String.format("Token inválido %s", ex.getMessage()));
+        }
+        return false;
+    }
+
+    public static String getUsernameFromToken(String token) {
+        return getClaimsFromToken(token).getSubject();
     }
 }
