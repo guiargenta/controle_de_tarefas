@@ -2,6 +2,7 @@ package com.gargenta.controleTarefas.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -21,5 +22,6 @@ public class CreateUsuarioDto {
     private String password;
 
     @NotBlank
+    @Pattern(regexp = "^[a-zA-Z0-9]{3,10}$", message = "Formato de username inválido")
     private String username;
 }
