@@ -82,4 +82,9 @@ public class UsuarioService {
         }
         usuarioRepository.deleteById(id);
     }
+
+    @Transactional(readOnly = true)
+    public Usuario.Role buscarRolePorUsername(String username) {
+        return usuarioRepository.findRoleByUsername(username);
+    }
 }
