@@ -1,5 +1,29 @@
-### GET request to example server
-GET https://examples.http-client.intellij.net/get
-    ?generated-in=IntelliJ IDEA
+@BearerToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJHdWkxIieyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJHdWkxIiwiaWF0IjoxNzY1MjQ3OTUxLCJleHAiOjE3NjUyNDgxOTEsInJvbGUiOiJVU0VSIn0.w2tQxBYB_wwz7Kr5bMHTE2_OZLWMjrnuJeBJJI6tKb8wiaWF0IjoxNzY1MjQ3NzI5LCJleHAiOjE3NjUyNDc5NjksInJvbGUiOiJVU0VSIn0.29Ot4jQDHw6lVRzF5aO_qh2YOXELnBOGkVaSjQ6dqGs
 
+### Login
+POST http://localhost:8888/api/auth
+Content-Type: application/json
+
+{
+  "username": "Gui1",
+  "password": "123456"
+}
+
+###
+
+### Criar novo usuário
+POST http://localhost:8888/api/usuarios
+Content-Type: application/json
+
+{
+  "email": "gui@admin.com",
+  "username": "Gui1",
+  "password": "123456"
+}
+###
+
+### Listar usuários --- getAllUsers()
+GET http://localhost:8888/api/usuarios
+Authorization: Bearer {{BearerToken}}
+Content-Type: application/json
 ###
