@@ -28,5 +28,4 @@ public class JwtUserDetailsService implements UserDetailsService {
         return JwtUtils.createToken(username, role.name().substring("ROLE_".length()));
         // para o cliente autenticar na API, passando o username e a role
     }
-
 }
