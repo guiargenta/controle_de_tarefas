@@ -9,17 +9,19 @@ import lombok.extern.slf4j.Slf4j;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Slf4j
 public class JwtUtils {
 
-    static final String JWT_BEARER = "Bearer ";
-    static final String JWT_AUTHORIZATION = "Authorization";
-    static final String SECRET_KEY = "0123456789-0123456789-0123456789";
-    static final long EXPIRE_DAYS = 0;
-    static final long EXPIRE_HOURS = 0;
-    static final long EXPIRE_MINUTES = 4;
+    public static final String JWT_BEARER = "Bearer ";
+    public static final String JWT_AUTHORIZATION = "Authorization";
+    public static final String SECRET_KEY = "0123456789-0123456789-0123456789";
+    public static final long EXPIRE_DAYS = 0;
+    public static final long EXPIRE_HOURS = 0;
+    public static final long EXPIRE_MINUTES = 4;
 
     private JwtUtils() {
     }
@@ -29,9 +31,14 @@ public class JwtUtils {
     }
 
     private static Date expireDate(Date start) {
-        LocalDateTime dateTime = LocalDateTime.from(start.toInstant());
-        LocalDateTime end = dateTime.plusDays(EXPIRE_DAYS).plusHours(EXPIRE_HOURS).plusMinutes(EXPIRE_MINUTES);
-        return Date.from(Instant.from(end));
+            Instant instant = start.toInstant()
+                    .plus(EXPIRE_DAYS, ChronoUnit.DAYS)
+                    .plus(EXPIRE_HOURS, ChronoUnit.HOURS)
+                    .plus(EXPIRE_MINUTES, ChronoUnit.MINUTES);
+            return Date.from(instant);
+//        LocalDateTime dateTime = LocalDateTime.ofInstant(start.toInstant(), ZoneId.from(""))
+//        LocalDateTime end = dateTime.plusDays(EXPIRE_DAYS).plusHours(EXPIRE_HOURS).plusMinutes(EXPIRE_MINUTES);
+//        return Date.from(Instant.from(end));
     }
 
     public static JwtToken createToken(String username, String role) {
