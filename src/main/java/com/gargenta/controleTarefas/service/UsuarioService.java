@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.util.List;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private PasswordEncoder passwordEncoder;
 
     public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
@@ -27,6 +29,7 @@ public class UsuarioService {
     @Transactional
     public Usuario salvar(Usuario usuario) {
         try {
+            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
             return usuarioRepository.saveAndFlush(usuario);
         } catch (DataIntegrityViolationException exception) {
             if (exception.getCause() instanceof UsernameUniqueViolationException) {
