@@ -51,11 +51,11 @@ public class UsuarioService {
 
         Usuario usuario = buscarPorId(id);
 
-        if (!senhaAtual.equals(usuario.getPassword())) {
+        if (!passwordEncoder.matches(senhaAtual, usuario.getPassword())) {
             throw new PasswordInvalidException("Senha atual não confere.");
         }
 
-        usuario.setPassword(novaSenha);
+        usuario.setPassword(passwordEncoder.encode(novaSenha));
         return usuario;
     }
 
