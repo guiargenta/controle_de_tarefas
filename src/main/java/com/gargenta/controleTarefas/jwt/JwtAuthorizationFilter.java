@@ -5,7 +5,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,8 +16,14 @@ import java.io.IOException;
 @Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
+
+    public JwtAuthorizationFilter(JwtUserDetailsService jwtUserDetailsService) {
+        this.jwtUserDetailsService = jwtUserDetailsService;
+    }
+
+    public JwtAuthorizationFilter() {
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -26,19 +31,20 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         final String token = request.getHeader(JwtUtils.JWT_AUTHORIZATION);
 
         if (token == null || !token.startsWith(JwtUtils.JWT_BEARER)) {
-            logger.info("JWT Token é nulo, vazio ou não é iniciado com 'Bearer: '.");
+            log.info("JWT Token é nulo, vazio ou não é iniciado com 'Bearer: '.");
             filterChain.doFilter(request, response);
             return;
         }
 
         if (!JwtUtils.isTokenValid(token)) {
-            logger.warn("JWT Token é inválido ou está expirado");
+            log.warn("JWT Token é inválido ou está expirado");
             filterChain.doFilter(request, response);
             return;
         }
 
         String username = JwtUtils.getUsernameFromToken(token);
         toAuthentication(request, username);
+
         filterChain.doFilter(request, response);
     }
 
