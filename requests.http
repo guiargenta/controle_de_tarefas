@@ -15,8 +15,8 @@ POST http://localhost:8888/api/usuarios
 Content-Type: application/json
 
 {
-  "email": "tiger@gmail.com",
-  "username": "Tiger",
+  "email": "zoe@gmail.com",
+  "username": "Zoe",
   "password": "123456"
 }
 

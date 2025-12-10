@@ -5,13 +5,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
@@ -32,6 +39,26 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 25)
     private Role role = Role.ROLE_USER;
+
+
+    // Colunas para auditoria
+
+    @Column
+    @CreatedDate
+    private LocalDateTime dataCriacao;
+
+    @Column
+    @LastModifiedDate
+    private LocalDateTime dataAtualizacao;
+
+    @Column
+    @CreatedBy
+    private String criadoPor;
+
+    @Column
+    @LastModifiedBy
+    private String atualizadoPor;
+
 
     public enum Role {
         ROLE_ADMIN, ROLE_USER
