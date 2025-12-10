@@ -32,7 +32,7 @@ public class AutenticacaoController {
 
     @PostMapping("/auth")
     public ResponseEntity<?> autenticar(@RequestBody @Valid UsuarioLoginDto dto, HttpServletRequest request) {
-        log.info("Iniciando autenticacao.. \nAutenticando com o login {}", dto.getUsername());
+        log.info("\nIniciando autenticacao.. \nAutenticando com o login {}", dto.getUsername());
 
         try {
             UsernamePasswordAuthenticationToken authenticationToken =
