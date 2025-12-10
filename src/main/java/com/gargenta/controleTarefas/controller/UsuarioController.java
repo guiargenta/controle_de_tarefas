@@ -73,6 +73,7 @@ public class UsuarioController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @GetMapping("/{id}")
+    @PreAuthorize("(hasRole('ADMIN')) OR (hasRole('USER') AND #id == authentication.principal.id)")
     public ResponseEntity<UsuarioResponseDto> getUserById(@PathVariable Long id) {
         Usuario usuario = usuarioService.buscarPorId(id);
         return ResponseEntity.ok(UsuarioMapper.toUsuarioDto(usuario));
@@ -115,6 +116,7 @@ public class UsuarioController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
         usuarioService.deletarUsuario(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
