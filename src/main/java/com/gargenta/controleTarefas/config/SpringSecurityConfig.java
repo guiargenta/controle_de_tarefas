@@ -1,5 +1,6 @@
 package com.gargenta.controleTarefas.config;
 
+import com.gargenta.controleTarefas.jwt.JwtAuthorizationEntryPoint;
 import com.gargenta.controleTarefas.jwt.JwtAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +35,8 @@ public class SpringSecurityConfig {
                 ).sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(
                         jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class
+                ).exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(new JwtAuthorizationEntryPoint())
                 ).build();
     }
 
