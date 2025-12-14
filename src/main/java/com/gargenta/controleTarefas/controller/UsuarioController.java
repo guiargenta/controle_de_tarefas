@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.Getter;
@@ -93,7 +94,8 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body(UsuarioMapper.toUsuarioDto(usuario));
     }
 
-    @Operation(summary = "Buscar todos usuários", description = "Recurso para buscar todos usuários",
+    @Operation(summary = "Recurso para buscar todos usuários", description = "Exige um Bearer-Token. Acesso restrito à ADMIN",
+            security = @SecurityRequirement(name = "security-token"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Usuários retornados com sucesso.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDto.class))),
