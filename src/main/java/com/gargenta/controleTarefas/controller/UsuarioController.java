@@ -89,6 +89,7 @@ public class UsuarioController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @GetMapping("/user")
+    @PreAuthorize("hasRole('ADMIN') OR ((hasRole('USER') AND #username == authentication.principal.username))")
     public ResponseEntity<UsuarioResponseDto> getByUsername(@RequestParam String username) {
         Usuario usuario = usuarioService.buscarPorUsername(username);
         return ResponseEntity.status(HttpStatus.OK).body(UsuarioMapper.toUsuarioDto(usuario));
