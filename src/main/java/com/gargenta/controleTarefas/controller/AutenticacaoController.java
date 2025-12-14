@@ -4,6 +4,10 @@ import com.gargenta.controleTarefas.dto.UsuarioLoginDto;
 import com.gargenta.controleTarefas.exception.exceptionHandler.ErrorMessage;
 import com.gargenta.controleTarefas.jwt.JwtToken;
 import com.gargenta.controleTarefas.jwt.JwtUserDetailsService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +34,16 @@ public class AutenticacaoController {
         this.authenticationManager = authenticationManager;
     }
 
+    @Operation(summary = "Realizar o login de um usuário", description = "Requisição exige 'usernme' e 'senha' para autenticar",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Usuário autenticado com sucesso.",
+                            content = @Content(
+                                    mediaType = "application/json", schema = @Schema(implementation = UsuarioLoginDto.class))),
+                    @ApiResponse(responseCode = "401", description = "Credenciais inválidas, autenticação falhou.",
+                            content = @Content(
+                                    mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)
+                            ))
+            })
     @PostMapping("/auth")
     public ResponseEntity<?> autenticar(@RequestBody @Valid UsuarioLoginDto dto, HttpServletRequest request) {
         log.info("\nIniciando autenticacao.. \nAutenticando com o login {}", dto.getUsername());
