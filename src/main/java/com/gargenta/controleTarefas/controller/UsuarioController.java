@@ -53,7 +53,10 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toUsuarioDto(usuarioSalvo));
     }
 
-    @Operation(summary = "Alterar senha", description = "Recurso para alterar a senha de um usuário",
+    @Operation(
+            summary = "Recurso para alterar a senha de um usuário",
+            description = "Exige um Bearer-Token para autenticação. Acesso restrito apenas ao próprio usuário.",
+            security = @SecurityRequirement(name = "security-token"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Senha alterada com sucesso.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDto.class))),
@@ -67,7 +70,10 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Buscar usuário por ID", description = "Recurso para buscar um usuário pelo ID",
+    @Operation(
+            summary = "Recurso para buscar um usuário pelo ID",
+            description = "Exige um Bearer-Token para autenticação. Acesso restrito à ADMIN (aocesso a todos) | USER (apenas ao próprio cadastro).",
+            security = @SecurityRequirement(name = "security-token"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Usuário recuperado com sucesso.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDto.class))),
@@ -81,7 +87,10 @@ public class UsuarioController {
         return ResponseEntity.ok(UsuarioMapper.toUsuarioDto(usuario));
     }
 
-    @Operation(summary = "Buscar usuário por 'username'", description = "Recurso para buscar um usuário pelo 'username'",
+    @Operation(
+            summary = "Recurso para buscar um usuário pelo 'username'",
+            description = "Exige um Bearer-Token para autenticação. Acesso restrito à ADMIN (aocesso a todos) | USER (apenas ao próprio cadastro).",
+            security = @SecurityRequirement(name = "security-token"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Usuário recuperado com sucesso.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDto.class))),
@@ -110,7 +119,9 @@ public class UsuarioController {
         return ResponseEntity.ok(UsuarioMapper.toListDto(usuarios));
     }
 
-    @Operation(summary = "Deletar usuário por ID", description = "Recurso para deletar um usuário pelo ID",
+
+    @Operation(summary = "Recurso para deletar um usuário pelo ID", description = "Exige um Bearer-Token. Acesso restrito à ADMIN",
+            security = @SecurityRequirement(name = "security-token"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Usuário deletado com sucesso.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDto.class))),
