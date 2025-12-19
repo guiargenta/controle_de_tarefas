@@ -198,14 +198,35 @@ public class UsuarioIT {
     }
 
     @Test
+    public void buscarUsuario_ClienteBuscandoOutroClientePorId_retornarErrorMessagemComStatus403() {
+        ErrorMessage responseBody = webTestClient
+                .get()
+                .uri("/api/usuarios/102")
+                .headers(JwtAuthentication.getHeaderAuthentication(webTestClient, "teste2", "222222"))
+                .exchange()
+                .expectStatus().isForbidden()
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        Assertions.assertNotNull(responseBody);
+        org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(403);
+    }
+
+    @Test
     public void mudarSenha_comDadosValidos_RetornarStatus204() {
-        webTestClient
+        UsuarioResponseDto responseBody = webTestClient
                 .put()
                 .uri("/api/usuarios/100")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new UsuarioSenhaDto("111111", "123456", "123456"))
                 .exchange()
-                .expectStatus().isNoContent();
+                .expectStatus().isNoContent()
+                .expectBody(UsuarioResponseDto.class)
+                .returnResult().getResponseBody();
+
+        Assertions.assertNotNull(responseBody);
+        org.assertj.core.api.Assertions.assertThat(responseBody.getUsername().equalsIgnoreCase("teste1"));
+        org.assertj.core.api.Assertions.assertThat(responseBody.getEmail().equalsIgnoreCase("teste1@gmail.com"));
     }
 
     @Test
