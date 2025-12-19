@@ -183,6 +183,21 @@ public class UsuarioIT {
     }
 
     @Test
+    public void buscarUsuario_comIdInexistente_retornarErrorMessagemComStatus404() {
+        ErrorMessage responseBody = webTestClient
+                .get()
+                .uri("/api/usuarios/34")
+                .headers(JwtAuthentication.getHeaderAuthentication(webTestClient, "teste1", "111111"))
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        Assertions.assertNotNull(responseBody);
+        org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(404);
+    }
+
+    @Test
     public void mudarSenha_comDadosValidos_RetornarStatus204() {
         webTestClient
                 .put()
