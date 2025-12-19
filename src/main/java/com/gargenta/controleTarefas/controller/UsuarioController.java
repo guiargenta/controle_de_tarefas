@@ -58,9 +58,12 @@ public class UsuarioController {
             description = "Exige um Bearer-Token para autenticação. Acesso restrito apenas ao próprio usuário.",
             security = @SecurityRequirement(name = "security-token"),
             responses = {
-                    @ApiResponse(responseCode = "204", description = "Senha alterada com sucesso.",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDto.class))),
+                    @ApiResponse(responseCode = "204", description = "Senha alterada com sucesso."),
                     @ApiResponse(responseCode = "400", description = "Não autorizado devido à falha de autenticação.",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Não tem permissão para acessar este recurso.",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "422", description = "Campos inválidos ou mal formatados.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PutMapping("/{id}")
